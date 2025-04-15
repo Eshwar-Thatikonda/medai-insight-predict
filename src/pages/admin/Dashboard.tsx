@@ -2,8 +2,9 @@
 import React from 'react';
 import { AdminLayout } from '@/components/AdminLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, LineChart } from '@/components/ui/chart';
-import { ArrowUpRight, Database, Users, Brain, Alert } from 'lucide-react';
+import { AlertCircle, ArrowUpRight, Database, Users, Brain } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { ChartContainer } from '@/components/ui/chart';
 
 const AdminDashboard = () => {
   return (
@@ -69,20 +70,30 @@ const AdminDashboard = () => {
               <CardTitle>Prediction Trends</CardTitle>
               <CardDescription>Daily prediction volume over time</CardDescription>
             </CardHeader>
-            <CardContent>
-              <LineChart
-                data={[
-                  { name: 'Jan', value: 320 },
-                  { name: 'Feb', value: 280 },
-                  { name: 'Mar', value: 420 },
-                  { name: 'Apr', value: 380 },
-                  { name: 'May', value: 450 },
-                  { name: 'Jun', value: 520 },
-                ]}
-                legends={[
-                  { name: 'Predictions', color: 'var(--chart-primary)' },
-                ]}
-              />
+            <CardContent className="h-[300px]">
+              <ChartContainer 
+                config={{
+                  primary: {
+                    color: 'hsl(var(--primary))'
+                  }
+                }}
+              >
+                {/* Simple prediction trends visualization */}
+                <div className="w-full h-full flex items-end">
+                  {[320, 280, 420, 380, 450, 520].map((value, i) => (
+                    <div 
+                      key={i} 
+                      className="h-full flex-1 flex flex-col justify-end mx-1"
+                    >
+                      <div 
+                        style={{ height: `${(value / 520) * 100}%` }} 
+                        className="bg-primary/80 rounded-t-sm"
+                      ></div>
+                      <div className="text-xs mt-1 text-center">{['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'][i]}</div>
+                    </div>
+                  ))}
+                </div>
+              </ChartContainer>
             </CardContent>
           </Card>
           <Card className="col-span-1">
@@ -90,19 +101,22 @@ const AdminDashboard = () => {
               <CardTitle>Disease Distribution</CardTitle>
               <CardDescription>Most common predicted diseases</CardDescription>
             </CardHeader>
-            <CardContent>
-              <BarChart
-                data={[
-                  { name: 'Diabetes', value: 210 },
-                  { name: 'Hypertension', value: 180 },
-                  { name: 'CAD', value: 120 },
-                  { name: 'Arthritis', value: 90 },
-                  { name: 'COPD', value: 70 },
-                ]}
-                legends={[
-                  { name: 'Count', color: 'var(--chart-primary)' },
-                ]}
-              />
+            <CardContent className="space-y-4">
+              {[
+                { name: 'Diabetes', value: 210, max: 210 },
+                { name: 'Hypertension', value: 180, max: 210 },
+                { name: 'CAD', value: 120, max: 210 },
+                { name: 'Arthritis', value: 90, max: 210 },
+                { name: 'COPD', value: 70, max: 210 }
+              ].map((disease) => (
+                <div key={disease.name} className="space-y-1">
+                  <div className="flex justify-between text-sm">
+                    <span>{disease.name}</span>
+                    <span className="font-medium">{disease.value}</span>
+                  </div>
+                  <Progress value={(disease.value / disease.max) * 100} className="h-2" />
+                </div>
+              ))}
             </CardContent>
           </Card>
         </div>
@@ -115,7 +129,7 @@ const AdminDashboard = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-start gap-4 rounded-lg border p-4">
-                <Alert className="h-5 w-5 text-amber-500" />
+                <AlertCircle className="h-5 w-5 text-amber-500" />
                 <div>
                   <p className="font-medium">Model training completed</p>
                   <p className="text-sm text-muted-foreground">
@@ -125,7 +139,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
               <div className="flex items-start gap-4 rounded-lg border p-4">
-                <Alert className="h-5 w-5 text-green-500" />
+                <AlertCircle className="h-5 w-5 text-green-500" />
                 <div>
                   <p className="font-medium">Database backup successful</p>
                   <p className="text-sm text-muted-foreground">
@@ -135,7 +149,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
               <div className="flex items-start gap-4 rounded-lg border p-4">
-                <Alert className="h-5 w-5 text-blue-500" />
+                <AlertCircle className="h-5 w-5 text-blue-500" />
                 <div>
                   <p className="font-medium">New patient data imported</p>
                   <p className="text-sm text-muted-foreground">

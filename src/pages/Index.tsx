@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { PatientDataForm } from '@/components/PatientDataForm';
-import { PredictionResults } from '@/components/PredictionResults';
+import PredictionResults from '@/components/PredictionResults';
 import DashboardMetrics from '@/components/DashboardMetrics';
 import { PatientData, PredictionResult } from '@/types/medical';
 import { predictDisease } from '@/services/modelService';

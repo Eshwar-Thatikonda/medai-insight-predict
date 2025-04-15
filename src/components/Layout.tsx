@@ -1,10 +1,11 @@
 
 import React from 'react';
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Activity, Database, FileBarChart, Heart, Info, Settings, Thermometer, User, Users } from "lucide-react";
+import { Activity, Database, FileBarChart, Heart, Info, LogOut, Settings, Thermometer, User, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '@/contexts/AuthContext';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,6 +14,16 @@ interface LayoutProps {
 export const Layout = ({ children }: LayoutProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { logout, currentUser } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+  };
 
   return (
     <SidebarProvider>
@@ -36,6 +47,11 @@ export const Layout = ({ children }: LayoutProps) => {
               </div>
             </div>
             <div className="ml-auto flex items-center gap-2">
+              {currentUser && (
+                <span className="text-sm text-muted-foreground mr-4">
+                  Welcome, {currentUser.name}
+                </span>
+              )}
               <Button 
                 variant="ghost" 
                 size="sm"
@@ -50,17 +66,12 @@ export const Layout = ({ children }: LayoutProps) => {
                 Help
               </Button>
               <Button 
-                variant="secondary" 
+                variant="outline" 
                 size="sm"
-                onClick={() => {
-                  navigate('/admin/dashboard');
-                  toast({
-                    title: "Admin Access",
-                    description: "Switching to admin interface",
-                  });
-                }}
+                onClick={handleLogout}
               >
-                Admin Access
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
               </Button>
             </div>
           </header>

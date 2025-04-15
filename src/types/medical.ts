@@ -33,6 +33,8 @@ export interface Disease {
 }
 
 export interface PredictionResult {
-  disease: Disease;
+  disease: string;
   probability: number;
+  description?: string;
+  severity?: 'low' | 'medium' | 'high';
 }

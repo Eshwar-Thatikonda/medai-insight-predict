@@ -1,6 +1,6 @@
 
 // This file simulates ML model predictions that would normally come from a backend
-import { PatientData, Disease } from "@/types/medical";
+import { PatientData, Disease, PredictionResult } from "@/types/medical";
 
 // Simulated diseases with their symptoms and information
 const diseases: Disease[] = [
@@ -56,7 +56,7 @@ const diseases: Disease[] = [
 ];
 
 // Function to predict disease likelihood from patient data
-export const predictDisease = (patientData: PatientData): { disease: Disease, probability: number }[] => {
+export const predictDisease = (patientData: PatientData): { disease: string; probability: number; description?: string; severity?: 'low' | 'medium' | 'high' }[] => {
   // This is a simplified simulation of an ML model's prediction logic
   
   const results = diseases.map(disease => {
@@ -115,9 +115,24 @@ export const predictDisease = (patientData: PatientData): { disease: Disease, pr
     // Clamp between 0 and 1
     probability = Math.max(0, Math.min(1, probability));
     
+    // Determine severity based on probability
+    let severity: 'low' | 'medium' | 'high' | undefined;
+    if (probability < 0.33) {
+      severity = 'low';
+    } else if (probability < 0.66) {
+      severity = 'medium';
+    } else {
+      severity = 'high';
+    }
+    
+    // Convert probability to percentage for display
+    const probabilityPercent = probability * 100;
+    
     return {
-      disease,
-      probability
+      disease: disease.name,
+      probability: probabilityPercent,
+      description: disease.description,
+      severity
     };
   });
   

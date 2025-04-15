@@ -1,12 +1,10 @@
 
 import React from 'react';
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Brain, Database, FileBarChart, Heart, LogOut, Settings, Users } from "lucide-react";
+import { Brain, Database, FileBarChart, Heart, Settings, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from '@/contexts/AuthContext';
-import AddCandidateForm from './AddCandidateForm';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -15,16 +13,6 @@ interface AdminLayoutProps {
 export const AdminLayout = ({ children }: AdminLayoutProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { logout, currentUser } = useAuth();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-    toast({
-      title: "Logged out",
-      description: "You have been successfully logged out.",
-    });
-  };
 
   return (
     <SidebarProvider>
@@ -48,18 +36,18 @@ export const AdminLayout = ({ children }: AdminLayoutProps) => {
               </div>
             </div>
             <div className="ml-auto flex items-center gap-2">
-              {currentUser && (
-                <span className="text-sm text-muted-foreground mr-4">
-                  Admin: {currentUser.name}
-                </span>
-              )}
               <Button 
-                variant="outline" 
+                variant="ghost" 
                 size="sm"
-                onClick={handleLogout}
+                onClick={() => {
+                  navigate('/');
+                  toast({
+                    title: "Switched to User View",
+                    description: "You are now viewing the user interface",
+                  });
+                }}
               >
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                Switch to User View
               </Button>
             </div>
           </header>

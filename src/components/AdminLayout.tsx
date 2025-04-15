@@ -1,25 +1,25 @@
 
 import React from 'react';
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Activity, Database, FileBarChart, Heart, Info, Settings, Thermometer, User, Users } from "lucide-react";
+import { Brain, Database, FileBarChart, Heart, Settings, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 
-interface LayoutProps {
+interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-export const Layout = ({ children }: LayoutProps) => {
+export const AdminLayout = ({ children }: AdminLayoutProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
-        <AppSidebar />
+        <AdminSidebar />
         <div className="flex-1 flex flex-col">
-          <header className="h-16 border-b flex items-center px-6 bg-white dark:bg-gray-950 sticky top-0 z-10">
+          <header className="h-16 border-b flex items-center px-6 bg-primary/10 dark:bg-gray-950 sticky top-0 z-10">
             <div className="flex items-center gap-2">
               <SidebarTrigger className="lg:hidden">
                 <Button variant="outline" size="icon" className="h-9 w-9">
@@ -31,8 +31,8 @@ export const Layout = ({ children }: LayoutProps) => {
                 </Button>
               </SidebarTrigger>
               <div className="flex items-center gap-2">
-                <Heart className="h-5 w-5 text-medical-600" />
-                <h1 className="font-semibold text-lg hidden sm:inline-block">MedAI Insight Predict</h1>
+                <Heart className="h-5 w-5 text-primary" />
+                <h1 className="font-semibold text-lg hidden sm:inline-block">MedAI Admin Panel</h1>
               </div>
             </div>
             <div className="ml-auto flex items-center gap-2">
@@ -40,27 +40,14 @@ export const Layout = ({ children }: LayoutProps) => {
                 variant="ghost" 
                 size="sm"
                 onClick={() => {
+                  navigate('/');
                   toast({
-                    title: "Help Center",
-                    description: "Contact support for assistance with diagnosis predictions.",
+                    title: "Switched to User View",
+                    description: "You are now viewing the user interface",
                   });
                 }}
               >
-                <Info className="h-4 w-4 mr-2" />
-                Help
-              </Button>
-              <Button 
-                variant="secondary" 
-                size="sm"
-                onClick={() => {
-                  navigate('/admin/dashboard');
-                  toast({
-                    title: "Admin Access",
-                    description: "Switching to admin interface",
-                  });
-                }}
-              >
-                Admin Access
+                Switch to User View
               </Button>
             </div>
           </header>
@@ -73,35 +60,35 @@ export const Layout = ({ children }: LayoutProps) => {
   );
 };
 
-const AppSidebar = () => {
+const AdminSidebar = () => {
   return (
-    <Sidebar className="border-r">
+    <Sidebar className="border-r bg-primary/5">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+          <SidebarGroupLabel>Admin Dashboard</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="/">
-                    <Activity className="h-4 w-4" />
-                    <span>Diagnosis Predictor</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/patients">
-                    <Users className="h-4 w-4" />
-                    <span>Patient Records</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/analytics">
+                  <a href="/admin/dashboard">
                     <FileBarChart className="h-4 w-4" />
-                    <span>Analytics</span>
+                    <span>Dashboard</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href="/admin/model-training">
+                    <Brain className="h-4 w-4" />
+                    <span>Model Training</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href="/admin/patients">
+                    <Users className="h-4 w-4" />
+                    <span>Patient Data</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -109,28 +96,12 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Resources</SidebarGroupLabel>
+          <SidebarGroupLabel>Configuration</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <a href="/database">
-                    <Database className="h-4 w-4" />
-                    <span>Disease Database</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/profiles">
-                    <User className="h-4 w-4" />
-                    <span>Patient Profiles</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="/settings">
+                  <a href="/admin/settings">
                     <Settings className="h-4 w-4" />
                     <span>Settings</span>
                   </a>
